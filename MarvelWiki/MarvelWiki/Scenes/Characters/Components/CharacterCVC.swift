@@ -9,12 +9,6 @@ import UIKit
 
 class CharacterCVC: UICollectionViewCell {
     
-    static let kReuseIdenitifier = "CharacterCVC"
-    
-    static func nib() -> UINib{
-        return UINib(nibName: CharacterCVC.kReuseIdenitifier, bundle: nil)
-    }
-    
     // MARK: - OUTLETS
 
     @IBOutlet weak var nameLabel: UILabel!

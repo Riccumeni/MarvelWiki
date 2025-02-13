@@ -5,6 +5,8 @@
 //  Created by Alessandro Riccumeni on 12/02/25.
 //
 
+// TODO: CharactersVC, ComicsVC, SeriesVC con CollectionView
+
 import UIKit
 
 @main

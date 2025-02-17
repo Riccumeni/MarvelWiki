@@ -6,8 +6,15 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		C63BB6C5879A72A35D9DED3B /* Pods_MarvelWiki.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85D27FFEBA98D30DEE16699C /* Pods_MarvelWiki.framework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
+		09C1CE992C3D2BC1E5479938 /* Pods-MarvelWiki.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MarvelWiki.debug.xcconfig"; path = "Target Support Files/Pods-MarvelWiki/Pods-MarvelWiki.debug.xcconfig"; sourceTree = "<group>"; };
 		3ECAE7C02D5CF3F800AA2E0A /* MarvelWiki.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MarvelWiki.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		76F7DF75CAC6CD4CF9333F52 /* Pods-MarvelWiki.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MarvelWiki.release.xcconfig"; path = "Target Support Files/Pods-MarvelWiki/Pods-MarvelWiki.release.xcconfig"; sourceTree = "<group>"; };
+		85D27FFEBA98D30DEE16699C /* Pods_MarvelWiki.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MarvelWiki.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -36,17 +43,30 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C63BB6C5879A72A35D9DED3B /* Pods_MarvelWiki.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1AA797DA89812ABC85E70F8F /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				09C1CE992C3D2BC1E5479938 /* Pods-MarvelWiki.debug.xcconfig */,
+				76F7DF75CAC6CD4CF9333F52 /* Pods-MarvelWiki.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		3ECAE7B72D5CF3F800AA2E0A = {
 			isa = PBXGroup;
 			children = (
 				3ECAE7C22D5CF3F800AA2E0A /* MarvelWiki */,
 				3ECAE7C12D5CF3F800AA2E0A /* Products */,
+				1AA797DA89812ABC85E70F8F /* Pods */,
+				F51674E4CA164CF58116FA4A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -58,6 +78,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		F51674E4CA164CF58116FA4A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				85D27FFEBA98D30DEE16699C /* Pods_MarvelWiki.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -65,6 +93,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3ECAE7D32D5CF3F900AA2E0A /* Build configuration list for PBXNativeTarget "MarvelWiki" */;
 			buildPhases = (
+				1024C184B2CFA008EFA3FC93 /* [CP] Check Pods Manifest.lock */,
 				3ECAE7BC2D5CF3F800AA2E0A /* Sources */,
 				3ECAE7BD2D5CF3F800AA2E0A /* Frameworks */,
 				3ECAE7BE2D5CF3F800AA2E0A /* Resources */,
@@ -77,8 +106,6 @@
 				3ECAE7C22D5CF3F800AA2E0A /* MarvelWiki */,
 			);
 			name = MarvelWiki;
-			packageProductDependencies = (
-			);
 			productName = MarvelWiki;
 			productReference = 3ECAE7C02D5CF3F800AA2E0A /* MarvelWiki.app */;
 			productType = "com.apple.product-type.application";
@@ -127,6 +154,31 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		1024C184B2CFA008EFA3FC93 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MarvelWiki-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		3ECAE7BC2D5CF3F800AA2E0A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -140,6 +192,7 @@
 /* Begin XCBuildConfiguration section */
 		3ECAE7D42D5CF3F900AA2E0A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 09C1CE992C3D2BC1E5479938 /* Pods-MarvelWiki.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -167,6 +220,7 @@
 		};
 		3ECAE7D52D5CF3F900AA2E0A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 76F7DF75CAC6CD4CF9333F52 /* Pods-MarvelWiki.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

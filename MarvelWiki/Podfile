@@ -6,5 +6,6 @@ target 'MarvelWiki' do
   use_frameworks!
 
   # Pods for MarvelWiki
+  pod 'SDWebImage'
 
 end

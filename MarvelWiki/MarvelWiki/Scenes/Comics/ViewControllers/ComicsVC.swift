@@ -7,7 +7,15 @@
 
 import UIKit
 
+protocol ComicsVCDelegate: AnyObject {
+    func loadComics(completion: @escaping ([Comic]) -> Void)
+}
+
 class ComicsVC: UIViewController {
+    
+    private var comics: [Comic] = []
+        
+    weak var delegate: ComicsVCDelegate?
     
     // MARK: - Outlets
     @IBOutlet weak var comicsCollectionView: UICollectionView!
@@ -21,6 +29,18 @@ class ComicsVC: UIViewController {
         comicsCollectionView.dataSource = self
         
         comicsCollectionView.register(ComicCVC.nib(), forCellWithReuseIdentifier: ComicCVC.kReuseIdentifier)
+        
+        loadData()
+    }
+    
+    // MARK: - Private methods
+    private func loadData() {
+        comicsCollectionView.showLoadingIndicator(style: .large)
+        delegate?.loadComics(completion: { result in
+            self.comicsCollectionView.hideLoadingIndicator()
+            self.comics = result
+            self.comicsCollectionView.reloadData()
+        })
     }
 }
 
@@ -28,13 +48,15 @@ class ComicsVC: UIViewController {
 
 extension ComicsVC: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return comics.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ComicCVC.kReuseIdentifier, for: indexPath) as! ComicCVC
         
-        cell.setupCell(imageUrl: URL(string: "https://imgs.search.brave.com/_M6Iac1zTsCW3lVdRWMEUScctvoDHJoD7SMnWBhRcAs/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLnJl/ZGQuaXQvNGZ1YTV3/eG40OGZlMS5qcGVn"))
+        let comic = comics[indexPath.row]
+        
+        cell.setupCell(imageUrl: URL(string: comic.thumbnail.path + "." + comic.thumbnail.urlExtension))
         
         return cell
     }

@@ -39,7 +39,9 @@ class CharactersVC: UIViewController {
     // MARK: - Private Methods
         
     private func loadData() {
+        characterCollectionView.showLoadingIndicator(style: .large)
         delegate?.loadCharacters(completion: { result in
+            self.characterCollectionView.hideLoadingIndicator()
             self.characters = result
             self.characterCollectionView.reloadData()
         })

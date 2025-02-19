@@ -7,7 +7,15 @@
 
 import UIKit
 
+protocol CharactersVCDelegate: AnyObject {
+    func loadCharacters(completion: @escaping ([Character]) -> Void)
+}
+
 class CharactersVC: UIViewController {
+    
+    private var characters: [Character] = []
+        
+    weak var delegate: CharactersVCDelegate?
     
     // MARK: - Outlets
     
@@ -23,7 +31,18 @@ class CharactersVC: UIViewController {
         characterCollectionView.dataSource = self
         
         characterCollectionView.register(CharacterCVC.nib(), forCellWithReuseIdentifier: CharacterCVC.kReuseIdentifier)
+        
+        loadData()
 
+    }
+    
+    // MARK: - Private Methods
+        
+    private func loadData() {
+        delegate?.loadCharacters(completion: { result in
+            self.characters = result
+            self.characterCollectionView.reloadData()
+        })
     }
 }
 
@@ -31,13 +50,15 @@ class CharactersVC: UIViewController {
 
 extension CharactersVC: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 8
+        return characters.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterCVC.kReuseIdentifier, for: indexPath) as! CharacterCVC
         
-        cell.setupCell(name: "Hero \(indexPath.row)", imageUrl: URL(string: "https://imgs.search.brave.com/baAy3T2nKSmMAD3tFIpO97mrLPf1vgBEaH-ZE1vrsqw/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/cGNnYW1lc24uY29t/L3dwLWNvbnRlbnQv/c2l0ZXMvcGNnYW1l/c24vMjAyNC8xMi9t/YXJ2ZWwtcml2YWxz/LWNoYXJhY3RlcnMt/bW9vbi1rbmlnaHQt/LTU1MHgzMDkuanBn"))
+        let character = characters[indexPath.row]
+        
+        cell.setupCell(name: character.name, imageUrl: URL(string: "\(character.thumbnail.path).\(character.thumbnail.urlExtension)"))
         
         return cell
     }

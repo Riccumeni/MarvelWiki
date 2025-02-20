@@ -11,19 +11,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-    private var charactersRepository: CharactersRepository!
-    private var comicsRepository: ComicsRepository!
-    private var seriesRepository: SeriesRepository!
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
         guard let rootScene = (scene as? UIWindowScene) else { return }
         
-        charactersRepository = CharactersRepositoryImpl()
-        comicsRepository = ComicsRepositoryImpl()
-        seriesRepository = SeriesRepositoryImpl()
-        
-        let rootVC = MWTabBarController.newInstance(characterRepository: charactersRepository, comicsRepository: comicsRepository, seriesRepository: seriesRepository)
+        let rootVC = MWTabBarController.newInstance(
+            characterRepository: MWDependencyService.shared.getDependency(CharactersRepositoryImpl.self) as CharactersRepository,
+            comicsRepository: MWDependencyService.shared.getDependency(ComicsRepositoryImpl.self) as ComicsRepository,
+            seriesRepository: MWDependencyService.shared.getDependency(SeriesRepositoryImpl.self) as SeriesRepository
+        )
         let window = UIWindow(windowScene: rootScene)
         window.rootViewController = rootVC
         self.window = window

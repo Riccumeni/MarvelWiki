@@ -8,7 +8,7 @@
 import UIKit
 
 protocol ComicsVCDelegate: AnyObject {
-    func loadComics(completion: @escaping ([Comic]) -> Void)
+    func loadComics(completion: @escaping ([Comic], Bool) -> Void)
 }
 
 class ComicsVC: UIViewController {
@@ -36,7 +36,7 @@ class ComicsVC: UIViewController {
     // MARK: - Private methods
     private func loadData() {
         comicsCollectionView.showLoadingIndicator(style: .large)
-        delegate?.loadComics(completion: { result in
+        delegate?.loadComics(completion: { result, isSuccessful in
             self.comicsCollectionView.hideLoadingIndicator()
             self.comics = result
             self.comicsCollectionView.reloadData()

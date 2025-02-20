@@ -8,7 +8,7 @@
 import UIKit
 
 protocol SeriesVCDelegate: AnyObject {
-    func loadSeries(completion: @escaping ([Series]) -> Void)
+    func loadSeries(completion: @escaping ([Series], Bool) -> Void)
 }
 
 class SeriesVC: UIViewController {
@@ -35,11 +35,11 @@ class SeriesVC: UIViewController {
     
     private func loadData(){
         seriesCollectionView.showLoadingIndicator(style: .large)
-        delegate?.loadSeries(completion: { result in
+        delegate?.loadSeries() { result, isSuccessful in
             self.seriesCollectionView.hideLoadingIndicator()
             self.series = result
             self.seriesCollectionView.reloadData()
-        })
+        }
     }
 }
 

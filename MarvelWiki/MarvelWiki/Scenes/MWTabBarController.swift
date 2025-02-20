@@ -43,39 +43,42 @@ class MWTabBarController: UITabBarController, CharactersVCDelegate, ComicsVCDele
     
     // MARK: - CharactersVCDelegate
     
-    func loadCharacters(completion: @escaping ([Character]) -> Void) {
+    func loadCharacters(completion: @escaping ([Character], Bool) -> Void) {
         charactersRepository.getCharacters(filters: [:]) { result in
             switch result {
                 case .success(let characters):
-                completion(characters.data.results)
+                completion(characters.data.results, true)
             case .failure(let error):
                 print("Error: \(error)")
+                completion([], false)
             }
         }
     }
     
     // MARK: - ComicsVCDelegate
     
-    func loadComics(completion: @escaping ([Comic]) -> Void) {
+    func loadComics(completion: @escaping ([Comic], Bool) -> Void) {
         comicsRepository.getComics(filters: [:]) { result in
             switch result {
                 case .success(let characters):
-                completion(characters.data.results)
+                completion(characters.data.results, true)
             case .failure(let error):
                 print("Error: \(error)")
+                completion([], false)
             }
         }
     }
     
     // MARK: - SeriesVCDelegate
     
-    func loadSeries(completion: @escaping ([Series]) -> Void) {
+    func loadSeries(completion: @escaping ([Series], Bool) -> Void) {
         seriesRepository.getSeries(filters: [:]) { result in
             switch result {
                 case .success(let series):
-                completion(series.data.results)
+                completion(series.data.results, true)
             case .failure(let error):
                 print("Error: \(error)")
+                completion([], false)
             }
         }
     }

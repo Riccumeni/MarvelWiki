@@ -8,7 +8,7 @@
 import UIKit
 
 protocol CharactersVCDelegate: AnyObject {
-    func loadCharacters(completion: @escaping ([Character]) -> Void)
+    func loadCharacters(completion: @escaping ([Character], Bool) -> Void)
 }
 
 class CharactersVC: UIViewController {
@@ -40,7 +40,7 @@ class CharactersVC: UIViewController {
         
     private func loadData() {
         characterCollectionView.showLoadingIndicator(style: .large)
-        delegate?.loadCharacters(completion: { result in
+        delegate?.loadCharacters(completion: { result, isSuccessful in
             self.characterCollectionView.hideLoadingIndicator()
             self.characters = result
             self.characterCollectionView.reloadData()

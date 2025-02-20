@@ -7,6 +7,7 @@
 
 typealias CharactersResponse = Response<Character>
 typealias ComicsResponse = Response<Comic>
+typealias SeriesResponse = Response<Series>
 
 struct Response<T: Codable>: Codable {
     let status: String

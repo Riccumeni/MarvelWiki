@@ -7,7 +7,14 @@
 
 import UIKit
 
+protocol SeriesVCDelegate: AnyObject {
+    func loadSeries(completion: @escaping ([Series]) -> Void)
+}
+
 class SeriesVC: UIViewController {
+    
+    var series: [Series] = []
+    weak var delegate: SeriesVCDelegate?
     
     // MARK: - Outlets
     
@@ -22,6 +29,17 @@ class SeriesVC: UIViewController {
         seriesCollectionView.dataSource = self
         
         seriesCollectionView.register(SeriesCVC.nib(), forCellWithReuseIdentifier: SeriesCVC.kReuseIdentifier)
+        
+        loadData()
+    }
+    
+    private func loadData(){
+        seriesCollectionView.showLoadingIndicator(style: .large)
+        delegate?.loadSeries(completion: { result in
+            self.seriesCollectionView.hideLoadingIndicator()
+            self.series = result
+            self.seriesCollectionView.reloadData()
+        })
     }
 }
 
@@ -29,13 +47,15 @@ class SeriesVC: UIViewController {
 
 extension SeriesVC: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return series.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SeriesCVC.kReuseIdentifier, for: indexPath) as! SeriesCVC
         
-        cell.configure(title: "Series \(indexPath.row)")
+        let singleSeries = series[indexPath.row]
+        
+        cell.configure(title: singleSeries.title)
         
         return cell
     }

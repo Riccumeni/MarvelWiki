@@ -8,37 +8,46 @@
 import UIKit
 
 protocol MarvelContentVCDelegate: AnyObject {
-    func loadMarvelContent(completion: @escaping ([MarvelContent], Bool) -> Void)
+    func loadContent(marvelContentType: MarvelContentType, completion: @escaping ([Any], Bool) -> Void)
 }
 
 
 class MarvelContentVC: UIViewController {
     
-    @IBOutlet weak var characterCollectionView: UICollectionView!
+    @IBOutlet weak var collectionView: UICollectionView!
     
-    private var marvelContentType: MarvelContentType
+    var marvelContentType: MarvelContentType!
     
-    private var marvelContents: [MarvelContent] = []
+    private var marvelContents: [Any] = []
     
     weak var delegate: MarvelContentVCDelegate?
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        characterCollectionView.register(ReusableMarvelContentVCCell.nib(), forCellWithReuseIdentifier: ReusableMarvelContentVCCell.kReuseIdentifier)
+        collectionView.register(CharacterCVC.nib(), forCellWithReuseIdentifier: CharacterCVC.kReuseIdentifier)
+        collectionView.register(ComicCVC.nib(), forCellWithReuseIdentifier: ComicCVC.kReuseIdentifier)
+        collectionView.register(SeriesCVC.nib(), forCellWithReuseIdentifier: SeriesCVC.kReuseIdentifier)
+        
+        collectionView.delegate = self
+        collectionView.dataSource = self
         
         loadData()
     }
-
+    
     // MARK: - Private Methods
-        
+    
     private func loadData() {
-        characterCollectionView.showLoadingIndicator(style: .large)
-        delegate?.loadCharacters(completion: { result, isSuccessful in  // Gestico il tipo di load da fare: a che livello conviene farlo?
-            self.characterCollectionView.hideLoadingIndicator()
-            self.characters = result
-            self.characterCollectionView.reloadData()
+        collectionView.showLoadingIndicator(style: .large)
+        delegate?.loadContent(marvelContentType: marvelContentType, completion: { result, isSuccessful in 
+            self.collectionView.hideLoadingIndicator()
+            
+            self.marvelContents = result
+            
+            self.collectionView.reloadData()
         })
     }
+    
+}
     
     // MARK: - Extensions CV
 
@@ -48,13 +57,27 @@ class MarvelContentVC: UIViewController {
         }
         
         func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReusableMarvelContentVCCell.kReuseIdentifier, for: indexPath) as! ReusableMarvelContentVCCell
+            switch(self.marvelContentType) {
+            case .characters:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterCVC.kReuseIdentifier, for: indexPath) as! CharacterCVC
+                let character = marvelContents[indexPath.row] as! Character
+                cell.setupCell(name: character.name, imageUrl: URL(string: "\(character.thumbnail.path).\(character.thumbnail.urlExtension)"))
+                return cell
+            case .comics:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ComicCVC.kReuseIdentifier, for: indexPath) as! ComicCVC
+                let comic = marvelContents[indexPath.row] as! Comic
+                cell.setupCell(imageUrl: URL(string: "\(comic.thumbnail.path).\(comic.thumbnail.urlExtension)"))
+                return cell
             
-            let marvelContent = marvelContents[indexPath.row]
+            case .series:
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SeriesCVC.kReuseIdentifier, for: indexPath) as! SeriesCVC
+                let series = marvelContents[indexPath.row] as! Series
+                cell.configure(title: series.title)
+                return cell
             
-            cell.setupCell(name: marvelContent.name, imageUrl: URL(string: "\(marvelContent.thumbnail.path).\(marvelContent.thumbnail.urlExtension)"))
-            
-            return cell
+            default:
+                return UICollectionViewCell()
+            }
         }
     }
 
@@ -70,4 +93,4 @@ class MarvelContentVC: UIViewController {
         }
     }
 
-}
+

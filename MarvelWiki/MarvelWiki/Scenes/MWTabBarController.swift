@@ -8,7 +8,7 @@
 import UIKit
 import Foundation
 
-class MWTabBarController: UITabBarController, CharactersVCDelegate, ComicsVCDelegate, SeriesVCDelegate {
+class MWTabBarController: UITabBarController, MarvelContentVCDelegate {
     
     private var charactersRepository: CharactersRepository!
     private var comicsRepository: ComicsRepository!
@@ -21,17 +21,17 @@ class MWTabBarController: UITabBarController, CharactersVCDelegate, ComicsVCDele
         tabBarController.comicsRepository = comicsRepository
         tabBarController.seriesRepository = seriesRepository
         
-        let firstVC = CharactersVC.newInstance(title: "Characters", imageName: "person.2.fill") as! CharactersVC
+        let firstVC = MarvelContentVC.newInstance(title: "Characters", imageName: "person.2.fill", marvelContentType: .characters)
         firstVC.delegate = tabBarController
         let navFirstVC = UINavigationController(rootViewController: firstVC)
         navFirstVC.setNavigationBarHidden(true, animated: true)
         
-        let secondVC = ComicsVC.newInstance(title: "Comics", imageName: "book.closed.fill") as! ComicsVC
+        let secondVC = MarvelContentVC.newInstance(title: "Comics", imageName: "book.closed.fill", marvelContentType: .comics)
         secondVC.delegate = tabBarController
         let navSecondVC = UINavigationController(rootViewController: secondVC)
         navSecondVC.setNavigationBarHidden(true, animated: true)
         
-        let thirdVC = SeriesVC.newInstance(title: "Series", imageName: "books.vertical.fill") as! SeriesVC
+        let thirdVC = MarvelContentVC.newInstance(title: "Series", imageName: "books.vertical.fill", marvelContentType: .series)
         thirdVC.delegate = tabBarController
         let navThirdVC = UINavigationController(rootViewController: thirdVC)
         navThirdVC.setNavigationBarHidden(true, animated: true)
@@ -41,9 +41,9 @@ class MWTabBarController: UITabBarController, CharactersVCDelegate, ComicsVCDele
         return tabBarController
     }
     
-    // MARK: - CharactersVCDelegate
+    // MARK: - Private Methods
     
-    func loadCharacters(completion: @escaping ([Character], Bool) -> Void) {
+    private func loadCharacters(completion: @escaping ([Character], Bool) -> Void) {
         charactersRepository.getCharacters(filters: [:]) { result in
             switch result {
                 case .success(let characters):
@@ -55,9 +55,9 @@ class MWTabBarController: UITabBarController, CharactersVCDelegate, ComicsVCDele
         }
     }
     
-    // MARK: - ComicsVCDelegate
     
-    func loadComics(completion: @escaping ([Comic], Bool) -> Void) {
+    
+    private func loadComics(completion: @escaping ([Comic], Bool) -> Void) {
         comicsRepository.getComics(filters: [:]) { result in
             switch result {
                 case .success(let characters):
@@ -69,9 +69,8 @@ class MWTabBarController: UITabBarController, CharactersVCDelegate, ComicsVCDele
         }
     }
     
-    // MARK: - SeriesVCDelegate
     
-    func loadSeries(completion: @escaping ([Series], Bool) -> Void) {
+    private func loadSeries(completion: @escaping ([Series], Bool) -> Void) {
         seriesRepository.getSeries(filters: [:]) { result in
             switch result {
                 case .success(let series):
@@ -80,6 +79,18 @@ class MWTabBarController: UITabBarController, CharactersVCDelegate, ComicsVCDele
                 print("Error: \(error)")
                 completion([], false)
             }
+        }
+    }
+    
+    // MARK: - MarvelContentVCDelegate
+    func loadContent(marvelContentType: MarvelContentType, completion: @escaping ([Any], Bool) -> Void) {
+        switch(marvelContentType) {
+        case .characters:
+            loadCharacters(completion: completion)
+        case .comics:
+            loadComics(completion: completion)
+        case .series:
+            loadSeries(completion: completion)
         }
     }
 }

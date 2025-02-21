@@ -7,7 +7,7 @@
 
 import UIKit
 
-extension UIViewController {
+extension MarvelContentVC {
     /// Creates a new instance of the view controller with a specified title and tab bar item image.
     ///
     /// This method initializes a new instance of the view controller and sets its title and tab bar item image.
@@ -18,14 +18,14 @@ extension UIViewController {
     /// - Returns: A new instance of the view controller with the specified title and tab bar image.
     ///
     /// - Note: This method assumes that the view controller can be initialized using `init()`. If the view controller is instantiated from a storyboard, this method may not work correctly.
-    static func newInstance(title: String, imageName: String? = nil) -> UIViewController {
+    static func newInstance(title: String, imageName: String? = nil, marvelContentType: MarvelContentType) -> MarvelContentVC {
         let vc = self.init()
         
         vc.title = title
         if let imageName {
             vc.tabBarItem.image = UIImage(systemName: imageName)
         }
-        
+        vc.marvelContentType = marvelContentType
         return vc
     }
 }

@@ -11,9 +11,7 @@ class MWDependencyService {
     private var dependencies: [Any] = []
     
     init() {
-        dependencies.append(CharactersRepositoryImpl())
-        dependencies.append(ComicsRepositoryImpl())
-        dependencies.append(SeriesRepositoryImpl())
+
     }
     
     func getDependency<T: AnyObject>(_ type: T.Type) -> T {

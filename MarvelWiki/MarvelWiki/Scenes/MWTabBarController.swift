@@ -9,17 +9,9 @@ import UIKit
 import Foundation
 
 class MWTabBarController: UITabBarController, MarvelContentVCDelegate {
-    
-    private var charactersRepository: CharactersRepository!
-    private var comicsRepository: ComicsRepository!
-    private var seriesRepository: SeriesRepository!
-    
-    static func newInstance(characterRepository: CharactersRepository, comicsRepository: ComicsRepository, seriesRepository: SeriesRepository) -> MWTabBarController {
-        let tabBarController = MWTabBarController()
         
-        tabBarController.charactersRepository = characterRepository
-        tabBarController.comicsRepository = comicsRepository
-        tabBarController.seriesRepository = seriesRepository
+    static func newInstance() -> MWTabBarController {
+        let tabBarController = MWTabBarController()
         
         let firstVC = MarvelContentVC.newInstance(title: "Characters", imageName: "person.2.fill", marvelContentType: .characters)
         firstVC.delegate = tabBarController
@@ -41,56 +33,31 @@ class MWTabBarController: UITabBarController, MarvelContentVCDelegate {
         return tabBarController
     }
     
-    // MARK: - Private Methods
-    
-    private func loadCharacters(completion: @escaping ([Character], Bool) -> Void) {
-        charactersRepository.getCharacters(filters: [:]) { result in
-            switch result {
-                case .success(let characters):
-                completion(characters.data.results, true)
-            case .failure(let error):
-                print("Error: \(error)")
-                completion([], false)
-            }
-        }
-    }
-    
-    
-    
-    private func loadComics(completion: @escaping ([Comic], Bool) -> Void) {
-        comicsRepository.getComics(filters: [:]) { result in
-            switch result {
-                case .success(let characters):
-                completion(characters.data.results, true)
-            case .failure(let error):
-                print("Error: \(error)")
-                completion([], false)
-            }
-        }
-    }
-    
-    
-    private func loadSeries(completion: @escaping ([Series], Bool) -> Void) {
-        seriesRepository.getSeries(filters: [:]) { result in
-            switch result {
-                case .success(let series):
-                completion(series.data.results, true)
-            case .failure(let error):
-                print("Error: \(error)")
-                completion([], false)
-            }
-        }
-    }
-    
     // MARK: - MarvelContentVCDelegate
-    func loadContent(marvelContentType: MarvelContentType, completion: @escaping ([Any], Bool) -> Void) {
+    func loadContent(marvelContentType: MarvelContentType, completion: @escaping ([MarvelContent], Bool) -> Void) {
+        var path = ""
         switch(marvelContentType) {
         case .characters:
-            loadCharacters(completion: completion)
+            path = "/characters"
         case .comics:
-            loadComics(completion: completion)
+            path = "/comics"
         case .series:
-            loadSeries(completion: completion)
+            path = "/series"
         }
+        
+        MWNetworkManager.shared.get(path: path) { result in
+            switch result {
+            case .success(let data):
+                do {
+                    let characterResponse = try JSONDecoder().decode(MarvelResponse.self, from: data)
+                    completion(characterResponse.data.results, true)
+                } catch {
+                    completion([], false)
+                }
+            case .failure(_):
+                completion([], false)
+            }
+        }
+         
     }
 }

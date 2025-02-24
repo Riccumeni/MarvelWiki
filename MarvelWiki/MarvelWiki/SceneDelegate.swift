@@ -16,11 +16,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         guard let rootScene = (scene as? UIWindowScene) else { return }
         
-        let rootVC = MWTabBarController.newInstance(
-            characterRepository: MWDependencyService.shared.getDependency(CharactersRepositoryImpl.self) as CharactersRepository,
-            comicsRepository: MWDependencyService.shared.getDependency(ComicsRepositoryImpl.self) as ComicsRepository,
-            seriesRepository: MWDependencyService.shared.getDependency(SeriesRepositoryImpl.self) as SeriesRepository
-        )
+        let rootVC = MWTabBarController.newInstance()
         let window = UIWindow(windowScene: rootScene)
         window.rootViewController = rootVC
         self.window = window

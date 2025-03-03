@@ -39,7 +39,7 @@ class MWNetworkManager {
         return digest.map { String(format: "%02x", $0) }.joined()
     }
     
-    public func get(path: String, queryParams: [URLQueryItem], completion: @escaping (Result<Data, Error>) -> Void) {
+    public func get(path: String, queryParams: [URLQueryItem] = [], completion: @escaping (Result<Data, Error>) -> Void) {
         guard let url = buildURL(path, queryParams: queryParams) else {
             completion(.failure(NSError.init(domain: "MarvelWiki", code: 404, userInfo: ["message" : "url not found"])))
             return

@@ -39,7 +39,7 @@ class MWNetworkManager {
         return digest.map { String(format: "%02x", $0) }.joined()
     }
     
-    public func get(path: String, queryParams: [URLQueryItem] = [], completion: @escaping (Result<Data, Error>) -> Void) {
+    public func get<T: Codable>(path: String, queryParams: [URLQueryItem] = [], completion: @escaping (Result<T, Error>) -> Void) {
         guard let url = buildURL(path, queryParams: queryParams) else {
             completion(.failure(NSError.init(domain: "MarvelWiki", code: 404, userInfo: ["message" : "url not found"])))
             return
@@ -71,8 +71,13 @@ class MWNetworkManager {
             }
             
             DispatchQueue.main.async {
-                print(String(data: data, encoding: .utf8) ?? "No data")
-                completion(.success(data))
+                do{
+                    print(String(data: data, encoding: .utf8) ?? "No data")
+                    let response = try JSONDecoder().decode(T.self, from: data)
+                    completion(.success(response))
+                } catch {
+                    completion(.failure(NSError(domain: "MarvelWiki", code: 400, userInfo: ["message":"generic error"])))
+                }
             }
             
         }
